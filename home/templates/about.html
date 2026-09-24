@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .about-page {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .about-hero {
+        background: linear-gradient(135deg, #075e54, #0b806f);
+        color: white;
+        text-align: center;
+        padding: 55px 25px;
+        border-radius: 18px;
+        margin-bottom: 35px;
+    }
+
+    .about-hero h1 {
+        margin: 0 0 15px;
+        font-size: 38px;
+    }
+
+    .about-hero p {
+        max-width: 750px;
+        margin: 10px auto;
+        line-height: 1.7;
+        font-size: 17px;
+    }
+
+    .about-section {
+        background: white;
+        padding: 35px 25px;
+        border-radius: 16px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        text-align: center;
+    }
+
+    .about-section h2 {
+        color: #075e54;
+        margin-bottom: 15px;
+    }
+
+    .about-section > p {
+        max-width: 800px;
+        margin: 10px auto 25px;
+        color: #555;
+        line-height: 1.7;
+    }
+
+    .about-cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .about-card {
+        padding: 25px 18px;
+        border-radius: 12px;
+        background: #f4f8f7;
+    }
+
+    .about-icon {
+        font-size: 38px;
+        margin-bottom: 10px;
+    }
+
+    .about-card h3 {
+        color: #075e54;
+        margin-bottom: 10px;
+    }
+
+    .about-card p {
+        color: #666;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .join-section {
+        background: #e0f2f1;
+        text-align: center;
+        padding: 35px 20px;
+        border-radius: 16px;
+    }
+
+    .join-section h2 {
+        color: #075e54;
+    }
+
+    .join-section p {
+        color: #555;
+        line-height: 1.7;
+        margin-bottom: 20px;
+    }
+
+    .join-btn {
+        display: inline-block;
+        background: #075e54;
+        color: white;
+        padding: 12px 22px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .join-btn:hover {
+        background: #064c44;
+    }
+
+    @media (max-width: 768px) {
+
+        .about-page {
+            margin: 25px auto;
+            padding: 15px;
+        }
+
+        .about-hero {
+            padding: 40px 18px;
+        }
+
+        .about-hero h1 {
+            font-size: 28px;
+        }
+
+        .about-hero p {
+            font-size: 15px;
+        }
+
+        .about-cards {
+            grid-template-columns: 1fr;
+        }
+
+        .about-section {
+            padding: 28px 18px;
+        }
+    }
+</style>
+
+
+<div class="about-page">
+
+    <!-- About Hero -->
+    <section class="about-hero">
+
+        <h1>🌙 About Noor Al Huda Foundation</h1>
+
+        <p>
+            Noor Al Huda Foundation is dedicated to
+            helping people and supporting the community.
+        </p>
+
+        <p>
+            Our mission is to serve humanity with
+            kindness, education, and care.
+        </p>
+
+    </section>
+
+
+    <!-- Our Purpose -->
+    <section class="about-section">
+
+        <h2>Our Purpose</h2>
+
+        <p>
+            We work for the welfare and development
+            of our community by supporting people,
+            encouraging education and creating
+            opportunities to serve society.
+        </p>
+
+    </section>
+
+
+    <!-- What We Do -->
+    <section class="about-section">
+
+        <h2>What We Do</h2>
+
+        <p>
+            Our foundation focuses on community
+            support, education and volunteer activities.
+        </p>
+
+        <div class="about-cards">
+
+            <div class="about-card">
+
+                <div class="about-icon">📚</div>
+
+                <h3>Education Support</h3>
+
+                <p>
+                    We encourage education and learning
+                    opportunities for everyone.
+                </p>
+
+            </div>
+
+
+            <div class="about-card">
+
+                <div class="about-icon">❤️</div>
+
+                <h3>Community Service</h3>
+
+                <p>
+                    We support needy people through
+                    community service activities.
+                </p>
+
+            </div>
+
+
+            <div class="about-card">
+
+                <div class="about-icon">🤝</div>
+
+                <h3>Volunteer Activities</h3>
+
+                <p>
+                    We welcome volunteers who want to
+                    serve society with kindness.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Join Us -->
+    <section class="join-section">
+
+        <h2>🤝 Join Our Mission</h2>
+
+        <p>
+            Your time, skills and kindness can help
+            us support more people in our community.
+        </p>
+
+        <a href="{% url 'volunteer_register' %}" class="join-btn">
+            Become a Volunteer
+        </a>
+
+    </section>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Donation Successful</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f8f7;
+            text-align: center;
+        }
+
+        .success-box {
+            max-width: 500px;
+            margin: 100px auto;
+            background: white;
+            padding: 40px 25px;
+            border-radius: 18px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.10);
+        }
+
+        .success-icon {
+            font-size: 60px;
+        }
+
+        h1 {
+            color: #075e54;
+        }
+
+        p {
+            color: #555;
+            font-size: 17px;
+        }
+
+        .home-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: #075e54;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .home-btn:hover {
+            background-color: #064c44;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="success-box">
+
+        <div class="success-icon">
+            ❤️
+        </div>
+
+        <h1>Thank You!</h1>
+
+        <p>
+            Your donation details have been submitted successfully.
+        </p>
+
+        <p>
+            Thank you for supporting Noor Al Huda Foundation.
+        </p>
+
+        <a href="{% url 'home' %}" class="home-btn">
+            ⬅ Back to Home
+        </a>
+
+    </div>
+
+</body>
+</html>

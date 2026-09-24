@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .form-page {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .form-card {
+        background: white;
+        padding: 30px;
+        border-radius: 18px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.10);
+    }
+
+    .form-card h1 {
+        text-align: center;
+        color: #075e54;
+        margin-bottom: 10px;
+    }
+
+    .form-intro {
+        text-align: center;
+        color: #666;
+        margin-bottom: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 7px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-sizing: border-box;
+        font-size: 15px;
+    }
+
+    .form-group textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 13px;
+        background-color: #075e54;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .submit-btn:hover {
+        background-color: #064c44;
+    }
+
+    .back-btn {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+        color: #075e54;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+        .form-page {
+            margin: 20px auto;
+            padding: 15px;
+        }
+
+        .form-card {
+            padding: 22px;
+        }
+
+        .form-card h1 {
+            font-size: 25px;
+        }
+    }
+</style>
+
+<div class="form-page">
+
+    <div class="form-card">
+
+        <h1>🤝 Become a Volunteer</h1>
+
+        <p class="form-intro">
+            Join Noor Al Huda Foundation and help us make a difference.
+        </p>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>Name</label>
+                {{ form.name }}
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                {{ form.email }}
+            </div>
+
+            <div class="form-group">
+                <label>Phone</label>
+                {{ form.phone }}
+            </div>
+
+            <div class="form-group">
+                <label>Address</label>
+                {{ form.address }}
+            </div>
+
+            <button type="submit" class="submit-btn">
+                🤝 Register as Volunteer
+            </button>
+
+        </form>
+
+        <a href="{% url 'volunteer_list' %}" class="back-btn">
+            ← Back to Volunteers
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

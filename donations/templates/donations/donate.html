@@ -1,0 +1,277 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Donate - Noor Al Huda Foundation</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f8f7;
+            color: #333;
+        }
+
+        .donate-box {
+            max-width: 550px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.10);
+            text-align: center;
+        }
+
+        h1 {
+            color: #075e54;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #075e54;
+            margin-top: 30px;
+        }
+
+        .subtitle {
+            font-size: 17px;
+            color: #666;
+        }
+
+        .qr-section {
+            background-color: #f1f7f6;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 25px;
+        }
+
+        .qr-section img {
+            width: 300px;
+            max-width: 100%;
+            border: 5px solid #075e54;
+            border-radius: 12px;
+            padding: 5px;
+            background: white;
+        }
+
+        .upi-id {
+            margin-top: 15px;
+            font-size: 16px;
+        }
+
+        .upi-id strong {
+            color: #075e54;
+        }
+
+        .steps {
+            text-align: left;
+            background-color: #fafafa;
+            padding: 18px;
+            border-radius: 12px;
+            margin-top: 25px;
+        }
+
+        .steps h3 {
+            color: #075e54;
+            margin-top: 0;
+        }
+
+        .after-payment {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            border-radius: 15px;
+            text-align: left;
+        }
+
+        .after-payment h3 {
+            text-align: center;
+            color: #075e54;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 11px;
+            margin-top: 6px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+
+        textarea {
+            height: 80px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            width: 100%;
+            margin-top: 20px;
+            padding: 13px;
+            background-color: #075e54;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background-color: #064c44;
+        }
+
+        .back-home {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 18px;
+            background-color: #075e54;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+        }
+
+        .thank-you {
+            margin-top: 25px;
+            color: #075e54;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+
+            .donate-box {
+                margin: 15px;
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 27px;
+            }
+
+            .qr-section img {
+                width: 270px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="donate-box">
+
+    <h1>❤️ Donate to Noor Al Huda Foundation</h1>
+
+    <p class="subtitle">
+        Your small contribution can help someone in need.
+    </p>
+
+
+    <!-- QR SECTION -->
+
+    <div class="qr-section">
+
+        <h2>Scan & Donate</h2>
+
+        <p>
+            Open GPay, PhonePe or Paytm and scan the QR code.
+        </p>
+
+        <img src="{% static 'upi_qr.jpeg' %}"
+             alt="UPI QR Code">
+
+        <p class="upi-id">
+            <strong>UPI ID:</strong>
+            alishoukath637-4@okhdfcbank
+        </p>
+
+    </div>
+
+
+    <!-- HOW TO DONATE -->
+
+    <div class="steps">
+
+        <h3>How to Donate</h3>
+
+        <p>1️⃣ Open GPay, PhonePe or Paytm.</p>
+
+        <p>2️⃣ Scan the QR code.</p>
+
+        <p>3️⃣ Enter your donation amount.</p>
+
+        <p>4️⃣ Complete the UPI payment.</p>
+
+    </div>
+
+
+    <!-- AFTER PAYMENT -->
+
+    <div class="after-payment">
+
+        <h3>After Payment</h3>
+
+        <p style="text-align:center;">
+            These details are <strong>optional</strong>.
+        </p>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <label>Donor Name</label>
+
+            <input type="text"
+                   name="donor_name"
+                   placeholder="Enter your name (optional)">
+
+
+            <label>Amount</label>
+
+            <input type="number"
+                   name="amount"
+                   placeholder="Enter amount (optional)"
+                   step="0.01">
+
+
+            <label>Transaction ID</label>
+
+            <input type="text"
+                   name="transaction_id"
+                   placeholder="Enter transaction ID (optional)">
+
+
+            <label>Message</label>
+
+            <textarea name="message"
+                      placeholder="Any message (optional)"></textarea>
+
+
+            <button type="submit" class="submit-btn">
+                Submit Donation Details
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <p class="thank-you">
+        Thank you for supporting Noor Al Huda Foundation ❤️
+    </p>
+
+
+    <a href="{% url 'home' %}" class="back-home">
+        ⬅ Back to Home
+    </a>
+
+</div>
+
+</body>
+</html>

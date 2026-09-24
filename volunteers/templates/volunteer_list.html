@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+    .volunteer-page {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .volunteer-page h1 {
+        color: #075e54;
+        margin-bottom: 10px;
+    }
+
+    .volunteer-intro {
+        color: #666;
+        margin-bottom: 25px;
+    }
+
+    .register-btn {
+        display: inline-block;
+        background-color: #075e54;
+        color: white;
+        padding: 12px 22px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        margin-bottom: 30px;
+    }
+
+    .register-btn:hover {
+        background-color: #064c44;
+    }
+
+    .volunteer-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .volunteer-card {
+        background-color: white;
+        padding: 22px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+        text-align: left;
+    }
+
+    .volunteer-card h3 {
+        color: #075e54;
+        margin-top: 0;
+    }
+
+    .volunteer-card p {
+        color: #555;
+        line-height: 1.6;
+    }
+
+    .card-buttons {
+        margin-top: 18px;
+    }
+
+    .edit-btn,
+    .delete-btn {
+        display: inline-block;
+        padding: 8px 15px;
+        border-radius: 6px;
+        text-decoration: none;
+        color: white;
+        font-size: 14px;
+        margin-right: 6px;
+    }
+
+    .edit-btn {
+        background-color: #075e54;
+    }
+
+    .delete-btn {
+        background-color: #b02a37;
+    }
+
+    .empty-message {
+        background-color: white;
+        padding: 30px;
+        border-radius: 12px;
+        color: #666;
+    }
+
+</style>
+
+
+<div class="volunteer-page">
+
+    <h1>🤝 Our Volunteers</h1>
+
+    <p class="volunteer-intro">
+        Meet the people who support Noor Al Huda Foundation
+        through their time, skills and kindness.
+    </p>
+
+
+    <a href="{% url 'volunteer_register' %}" class="register-btn">
+        🤝 Become a Volunteer
+    </a>
+
+
+    {% if volunteers %}
+
+    <div class="volunteer-container">
+
+        {% for volunteer in volunteers %}
+
+        <div class="volunteer-card">
+
+            <h3>👤 {{ volunteer.name }}</h3>
+
+            <p>
+                <strong>Email:</strong><br>
+                {{ volunteer.email }}
+            </p>
+
+            <p>
+                <strong>Phone:</strong><br>
+                {{ volunteer.phone }}
+            </p>
+
+            <p>
+                <strong>Address:</strong><br>
+                {{ volunteer.address }}
+            </p>
+
+
+            <div class="card-buttons">
+
+                <a href="{% url 'volunteer_edit' volunteer.id %}"
+                   class="edit-btn">
+                    ✏️ Edit
+                </a>
+
+                <a href="{% url 'volunteer_delete' volunteer.id %}"
+                   class="delete-btn">
+                    🗑️ Delete
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="empty-message">
+        <p>🤝 No volunteers registered yet.</p>
+        <p>Be the first one to join us!</p>
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

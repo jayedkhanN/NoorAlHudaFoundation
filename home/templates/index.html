@@ -1,0 +1,281 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero">
+
+    <h1>Welcome to Noor Al Huda Foundation</h1>
+
+    <p>Serving humanity with kindness and care.</p>
+
+    <div class="hero-buttons">
+        <a href="/about/" class="primary-btn">Learn More</a>
+
+        <a href="/volunteers/" class="secondary-btn">
+            Join as a Volunteer
+        </a>
+
+        <a href="/donate/" class="donate-btn">
+            ❤️ Donate Now
+        </a>
+    </div>
+
+<!-- Foundation Statistics -->
+<div class="impact-section">
+
+    <h2>Our Impact</h2>
+
+    <div class="impact-cards">
+
+        <div class="impact-card">
+            <div class="impact-icon">🤝</div>
+            <h3>{{ volunteer_count }}</h3>
+            <p>Volunteers</p>
+        </div>
+
+        <div class="impact-card">
+            <div class="impact-icon">❤️</div>
+            <h3>{{ donation_count }}</h3>
+            <p>Donations</p>
+        </div>
+
+        <div class="impact-card">
+            <div class="impact-icon">💰</div>
+            <h3>₹{{ total_amount }}</h3>
+            <p>Total Amount</p>
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+.impact-section {
+    margin: 35px auto 10px;
+    max-width: 900px;
+}
+
+.impact-section h2 {
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+.impact-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.impact-card {
+    background: white;
+    padding: 22px 15px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.impact-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.impact-card h3 {
+    margin: 5px 0;
+    color: #075e54;
+    font-size: 28px;
+}
+
+.impact-card p {
+    margin: 0;
+    color: #666;
+    font-weight: bold;
+}
+
+@media (max-width: 700px) {
+    .impact-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .impact-card {
+        padding: 18px;
+    }
+}
+</style>
+
+</section>
+
+
+<!-- Services Section -->
+<section class="section">
+
+    <h2>Our Services</h2>
+
+    <div class="service-container">
+
+        <div class="service-card">
+            <div class="service-icon">📚</div>
+
+            <h3>Education Support</h3>
+
+            <p>
+                We support students and encourage education.
+            </p>
+        </div>
+
+
+        <div class="service-card">
+            <div class="service-icon">❤️</div>
+
+            <h3>Community Service</h3>
+
+            <p>
+                We help needy people and support our community.
+            </p>
+        </div>
+
+
+        <div class="service-card">
+            <div class="service-icon">🤝</div>
+
+            <h3>Volunteer Activities</h3>
+
+            <p>
+                Join us and serve society with kindness.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- Why Join Us -->
+<section class="section">
+
+    <h2>Why Join Us?</h2>
+
+    <p>
+        By joining Noor Al Huda Foundation,
+        you can help people and make a positive difference.
+    </p>
+
+    <p>
+        Your time, skills, and kindness can support
+        education and community service.
+    </p>
+
+    <a href="{% url 'volunteer_register' %}" class="primary-btn">
+        Register Now
+    </a>
+
+</section>
+
+
+<!-- Why Donate -->
+<section class="section donate-section">
+
+    <h2>Why Donate?</h2>
+
+    <p>
+        Your contribution can help support people in need.
+    </p>
+
+    <p>
+        Every small donation can make a meaningful difference
+        in someone's life.
+    </p>
+
+    <a href="/donate/" class="donate-btn">
+        ❤️ Donate Now
+    </a>
+
+</section>
+
+
+<!-- Mission -->
+<section class="section">
+
+    <h2>Our Mission</h2>
+
+    <p>
+        Noor Al Huda Foundation aims to support people in need
+        through kindness, care and community service.
+    </p>
+
+    <p>
+        Together, we can make a positive difference in society.
+    </p>
+
+</section>
+
+
+<!-- What We Do -->
+<section class="section">
+
+    <h2>What We Do</h2>
+
+    <div class="service-container">
+
+        <div class="volunteer-card">
+
+            <div class="service-icon">🤝</div>
+
+            <h3>Helping People</h3>
+
+            <p>
+                We support people who are in need.
+            </p>
+
+        </div>
+
+
+        <div class="volunteer-card">
+
+            <div class="service-icon">❤️</div>
+
+            <h3>Community Service</h3>
+
+            <p>
+                We work together to serve our community.
+            </p>
+
+        </div>
+
+
+        <div class="volunteer-card">
+
+            <div class="service-icon">🌙</div>
+
+            <h3>Charity & Donations</h3>
+
+            <p>
+                Your contribution helps us support meaningful causes.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- Become a Volunteer -->
+<section class="section volunteer-section">
+
+    <h2>Become a Volunteer</h2>
+
+    <p>
+        Join us and help make a difference in the lives of people
+        who need support.
+    </p>
+
+    <a href="{% url 'volunteer_list' %}" class="donate-btn">
+        🤝 Join as Volunteer
+    </a>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px;
+">
+
+    <h1 style="
+        text-align: center;
+        color: #075e54;
+        margin-bottom: 10px;
+    ">
+        👨‍💼 Foundation Dashboard
+    </h1>
+
+    <p style="
+        text-align: center;
+        color: #666;
+        margin-bottom: 35px;
+    ">
+        Noor Al Huda Foundation - Overview
+    </p>
+
+    <div style="
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    ">
+
+        <div style="
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        ">
+            <div style="font-size: 35px;">🤝</div>
+            <h2 style="color: #075e54;">
+                {{ volunteer_count }}
+            </h2>
+            <p>Volunteers</p>
+        </div>
+
+        <div style="
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        ">
+            <div style="font-size: 35px;">❤️</div>
+            <h2 style="color: #075e54;">
+                {{ donation_count }}
+            </h2>
+            <p>Donations</p>
+        </div>
+
+        <div style="
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        ">
+            <div style="font-size: 35px;">💰</div>
+            <h2 style="color: #075e54;">
+                ₹{{ total_amount }}
+            </h2>
+            <p>Total Donations</p>
+        </div>
+
+        <div style="
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        ">
+            <div style="font-size: 35px;">📩</div>
+            <h2 style="color: #075e54;">
+                {{ contact_count }}
+            </h2>
+            <p>Messages</p>
+            <div style="
+    text-align: center;
+    margin-bottom: 30px;
+">
+
+    <a href="/admin/" style="
+        display: inline-block;
+        background: #075e54;
+        color: white;
+        padding: 12px 22px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        margin: 5px;
+    ">
+        👨‍💼 Admin Panel
+    </a>
+
+    <a href="/" style="
+        display: inline-block;
+        background: #e8f5e9;
+        color: #075e54;
+        padding: 12px 22px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        margin: 5px;
+    ">
+        🏠 Back to Home
+    </a>
+
+</div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
