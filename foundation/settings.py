@@ -32,11 +32,7 @@ DEBUG = os.environ.get(
     "False"
 ).lower() == "true"
 
-ALLOWED_HOSTS = [
-    "nooralhudafoundation.onrender.com",
-    "localhost",
-    "127.0.0.1",
-]
+ALLOWED_HOSTS = ["*"]
 # =========================================================
 # APPLICATIONS
 # =========================================================
