@@ -9,6 +9,11 @@ class ContactMessageAdmin(admin.ModelAdmin):
         "name",
         "email",
         "message",
+        "created_at",
+    )
+
+    list_filter = (
+        "created_at",
     )
 
     search_fields = (
@@ -16,3 +21,13 @@ class ContactMessageAdmin(admin.ModelAdmin):
         "email",
         "message",
     )
+
+    ordering = (
+        "-created_at",
+    )
+
+    readonly_fields = (
+        "created_at",
+    )
+
+    list_per_page = 20

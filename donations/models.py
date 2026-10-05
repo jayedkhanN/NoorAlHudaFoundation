@@ -3,6 +3,14 @@ from django.db import models
 
 class Donation(models.Model):
 
+    user = models.ForeignKey(
+        'auth.User',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='donations'
+    )
+
     donor_name = models.CharField(
         max_length=100,
         blank=True

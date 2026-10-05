@@ -1,125 +1,1800 @@
-{% extends 'base.html' %}
+{% load static %}
 
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
 
-<div style="
-    max-width: 1100px;
-    margin: 40px auto;
-    padding: 20px;
-">
+<head>
 
-    <h1 style="
-        text-align: center;
-        color: #075e54;
-        margin-bottom: 10px;
-    ">
-        👨‍💼 Foundation Dashboard
-    </h1>
+    <meta charset="UTF-8">
 
-    <p style="
-        text-align: center;
-        color: #666;
-        margin-bottom: 35px;
-    ">
-        Noor Al Huda Foundation - Overview
-    </p>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <div style="
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 20px;
-    ">
+    <title>Noor Al Huda Foundation - Admin Dashboard</title>
 
-        <div style="
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Font -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+            font-family: "Inter", sans-serif;
+            background: #f4f8f6;
+            color: #17352b;
+        }
+
+
+        .dashboard-container {
+
+            width: 100%;
+            max-width: 1500px;
+            margin: auto;
+            padding: 30px;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ====================================================== */
+
+        .dashboard-header {
+
+            background: linear-gradient(
+                135deg,
+                #0b6b4f,
+                #084d3a
+            );
+
+            border-radius: 24px;
+
+            padding: 30px;
+
+            color: white;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 28px;
+
+            box-shadow:
+                0 15px 35px rgba(11, 107, 79, 0.18);
+        }
+
+
+        .header-left h1 {
+
+            font-size: 30px;
+
+            font-weight: 800;
+
+            margin-bottom: 8px;
+        }
+
+
+        .header-left p {
+
+            font-size: 14px;
+
+            opacity: 0.85;
+        }
+
+
+        /* =====================================================
+           HEADER ACTIONS
+        ====================================================== */
+
+        .header-actions {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+
+        .header-btn {
+
+            text-decoration: none;
+
+            color: white;
+
+            background:
+                rgba(255,255,255,0.12);
+
+            border:
+                1px solid rgba(255,255,255,0.20);
+
+            padding: 11px 16px;
+
+            border-radius: 12px;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            transition: 0.2s;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            white-space: nowrap;
+        }
+
+
+        .header-btn:hover {
+
+            background:
+                rgba(255,255,255,0.22);
+
+            transform:
+                translateY(-2px);
+
+            color: white;
+        }
+
+
+        .logout-btn {
+
+            background:
+                rgba(255,80,80,0.18);
+
+            border-color:
+                rgba(255,255,255,0.22);
+        }
+
+
+        .logout-btn:hover {
+
+            background:
+                rgba(255,80,80,0.30);
+        }
+
+
+        /* =====================================================
+           STATISTICS
+        ====================================================== */
+
+        .stats-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 28px;
+        }
+
+
+        .stat-card {
+
             background: white;
+
+            border-radius: 20px;
+
+            padding: 22px;
+
+            border:
+                1px solid #e4ece8;
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,0.04);
+
+            transition: 0.25s;
+        }
+
+
+        .stat-card:hover {
+
+            transform:
+                translateY(-4px);
+
+            box-shadow:
+                0 14px 30px rgba(0,0,0,0.08);
+        }
+
+
+        .stat-icon {
+
+            width: 48px;
+
+            height: 48px;
+
+            border-radius: 14px;
+
+            background: #e7f5ef;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 23px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .stat-card h3 {
+
+            font-size: 28px;
+
+            font-weight: 800;
+
+            color: #0b6b4f;
+
+            margin-bottom: 5px;
+        }
+
+
+        .stat-card p {
+
+            font-size: 13px;
+
+            color: #718078;
+
+            font-weight: 500;
+        }
+
+
+        /* =====================================================
+           SECTION TITLE
+        ====================================================== */
+
+        .section-title {
+
+            font-size: 21px;
+
+            font-weight: 800;
+
+            margin-bottom: 16px;
+
+            color: #17352b;
+        }
+
+
+        /* =====================================================
+           NEEDS ATTENTION
+        ====================================================== */
+
+        .attention-section {
+
+            margin-bottom: 28px;
+        }
+
+
+        .attention-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 18px;
+        }
+
+
+        .attention-card {
+
+            background: white;
+
+            border:
+                1px solid #e4ece8;
+
+            border-left:
+                5px solid #e67e22;
+
+            border-radius: 18px;
+
+            padding: 20px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+            text-decoration: none;
+
+            color: #17352b;
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,0.04);
+
+            transition: 0.25s;
+        }
+
+
+        .attention-card:hover {
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 12px 30px rgba(0,0,0,0.08);
+        }
+
+
+        .attention-icon {
+
+            width: 48px;
+
+            height: 48px;
+
+            border-radius: 14px;
+
+            background: #fff3e8;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 22px;
+        }
+
+
+        .attention-content {
+
+            flex: 1;
+        }
+
+
+        .attention-content h3 {
+
+            font-size: 25px;
+
+            font-weight: 800;
+
+            color: #e67e22;
+
+            margin-bottom: 3px;
+        }
+
+
+        .attention-content p {
+
+            font-size: 13px;
+
+            color: #718078;
+        }
+
+
+        .attention-arrow {
+
+            font-size: 22px;
+
+            color: #8a9690;
+        }
+
+
+        /* =====================================================
+           CHART
+        ====================================================== */
+
+        .chart-card {
+
+            background: white;
+
+            border-radius: 22px;
+
             padding: 25px;
-            border-radius: 15px;
+
+            border:
+                1px solid #e4ece8;
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,0.04);
+
+            margin-bottom: 28px;
+        }
+
+
+        .chart-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 20px;
+        }
+
+
+        .chart-header h2 {
+
+            font-size: 20px;
+
+            font-weight: 800;
+        }
+
+
+        .chart-header span {
+
+            font-size: 12px;
+
+            color: #718078;
+        }
+
+
+        .chart-wrapper {
+
+            position: relative;
+
+            height: 330px;
+
+            width: 100%;
+        }
+
+
+        /* =====================================================
+           OVERVIEW
+        ====================================================== */
+
+        .overview-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 22px;
+
+            margin-bottom: 28px;
+        }
+
+
+        .overview-card {
+
+            background: white;
+
+            border-radius: 22px;
+
+            padding: 25px;
+
+            border:
+                1px solid #e4ece8;
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,0.04);
+        }
+
+
+        .overview-card h2 {
+
+            font-size: 20px;
+
+            margin-bottom: 15px;
+
+            font-weight: 800;
+        }
+
+
+        .overview-card p {
+
+            font-size: 14px;
+
+            line-height: 1.7;
+
+            color: #68766f;
+        }
+
+
+        /* =====================================================
+           QUICK ACTIONS
+        ====================================================== */
+
+        .quick-actions {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 12px;
+
+            margin-top: 18px;
+        }
+
+
+        .quick-action {
+
+            text-decoration: none;
+
+            background: #f4f9f7;
+
+            border:
+                1px solid #e1ebe6;
+
+            padding: 14px;
+
+            border-radius: 14px;
+
+            color: #17352b;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            transition: 0.2s;
+        }
+
+
+        .quick-action:hover {
+
+            background: #e7f5ef;
+
+            border-color: #b9dccd;
+
+            transform:
+                translateY(-2px);
+        }
+
+
+        /* =====================================================
+           RECENT ACTIVITY
+        ====================================================== */
+
+        .activity-section {
+
+            margin-top: 10px;
+
+            margin-bottom: 30px;
+        }
+
+
+        .activity-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 20px;
+        }
+
+
+        .activity-card {
+
+            background: white;
+
+            border-radius: 22px;
+
+            padding: 22px;
+
+            border:
+                1px solid #e4ece8;
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,0.04);
+        }
+
+
+        .activity-card h3 {
+
+            font-size: 17px;
+
+            margin-bottom: 18px;
+
+            font-weight: 800;
+        }
+
+
+        .activity-item {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            padding: 13px 0;
+
+            border-bottom:
+                1px solid #edf1ef;
+        }
+
+
+        .activity-item:last-child {
+
+            border-bottom: none;
+        }
+
+
+        .activity-icon {
+
+            width: 42px;
+
+            height: 42px;
+
+            min-width: 42px;
+
+            border-radius: 12px;
+
+            background: #e7f5ef;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 18px;
+        }
+
+
+        .activity-content {
+
+            flex: 1;
+        }
+
+
+        .activity-content strong {
+
+            display: block;
+
+            font-size: 13px;
+
+            color: #17352b;
+
+            margin-bottom: 4px;
+        }
+
+
+        .activity-content span {
+
+            font-size: 11px;
+
+            color: #7a8781;
+        }
+
+
+        .activity-right {
+
+            text-align: right;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            color: #0b6b4f;
+        }
+
+
+        .status {
+
+            display: inline-block;
+
+            padding: 5px 9px;
+
+            border-radius: 8px;
+
+            background: #e7f5ef;
+
+            color: #0b6b4f;
+
+            font-size: 10px;
+
+            font-weight: 700;
+        }
+
+
+        /* =====================================================
+           EMPTY STATE
+        ====================================================== */
+
+        .empty-state {
+
             text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        ">
-            <div style="font-size: 35px;">🤝</div>
-            <h2 style="color: #075e54;">
+
+            padding: 25px;
+
+            color: #89958f;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ====================================================== */
+
+        .dashboard-footer {
+
+            text-align: center;
+
+            padding: 25px 0 10px;
+
+            color: #7b8882;
+
+            font-size: 12px;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ====================================================== */
+
+        @media (max-width: 1100px) {
+
+            .stats-grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 800px) {
+
+            .dashboard-container {
+
+                padding: 18px;
+            }
+
+
+            .dashboard-header {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 18px;
+            }
+
+
+            .header-actions {
+
+                width: 100%;
+
+                display: flex;
+
+                flex-wrap: wrap;
+            }
+
+
+            .overview-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .activity-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .attention-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 550px) {
+
+            .stats-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .quick-actions {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .header-left h1 {
+
+                font-size: 24px;
+            }
+
+
+            .chart-wrapper {
+
+                height: 280px;
+            }
+
+
+            .header-btn {
+
+                flex: 1;
+
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="dashboard-container">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="dashboard-header">
+
+
+        <div class="header-left">
+
+            <h1>
+                Noor Al Huda Foundation
+            </h1>
+
+            <p>
+                Admin Dashboard • Manage foundation activities
+            </p>
+
+        </div>
+
+
+        <div class="header-actions">
+
+
+            <a href="/admin/"
+               class="header-btn">
+
+                ⚙️ Admin Panel
+
+            </a>
+
+
+            <a href="/admin/logout/"
+               class="header-btn logout-btn">
+
+                🚪 Logout
+
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
+
+    <div class="stats-grid">
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🤝
+            </div>
+
+            <h3>
                 {{ volunteer_count }}
-            </h2>
-            <p>Volunteers</p>
+            </h3>
+
+            <p>
+                Volunteers
+            </p>
+
         </div>
 
-        <div style="
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        ">
-            <div style="font-size: 35px;">❤️</div>
-            <h2 style="color: #075e54;">
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                💰
+            </div>
+
+            <h3>
                 {{ donation_count }}
-            </h2>
-            <p>Donations</p>
+            </h3>
+
+            <p>
+                Donations
+            </p>
+
         </div>
 
-        <div style="
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        ">
-            <div style="font-size: 35px;">💰</div>
-            <h2 style="color: #075e54;">
-                ₹{{ total_amount }}
-            </h2>
-            <p>Total Donations</p>
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🆘
+            </div>
+
+            <h3>
+                {{ help_request_count }}
+            </h3>
+
+            <p>
+                Help Requests
+            </p>
+
         </div>
 
-        <div style="
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        ">
-            <div style="font-size: 35px;">📩</div>
-            <h2 style="color: #075e54;">
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🎉
+            </div>
+
+            <h3>
+                {{ event_count }}
+            </h3>
+
+            <p>
+                Events
+            </p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                👥
+            </div>
+
+            <h3>
+                {{ participation_count }}
+            </h3>
+
+            <p>
+                Event Participants
+            </p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                💬
+            </div>
+
+            <h3>
                 {{ contact_count }}
-            </h2>
-            <p>Messages</p>
-            <div style="
-    text-align: center;
-    margin-bottom: 30px;
-">
+            </h3>
 
-    <a href="/admin/" style="
-        display: inline-block;
-        background: #075e54;
-        color: white;
-        padding: 12px 22px;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: bold;
-        margin: 5px;
-    ">
-        👨‍💼 Admin Panel
-    </a>
+            <p>
+                Contact Messages
+            </p>
 
-    <a href="/" style="
-        display: inline-block;
-        background: #e8f5e9;
-        color: #075e54;
-        padding: 12px 22px;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: bold;
-        margin: 5px;
-    ">
-        🏠 Back to Home
-    </a>
+        </div>
 
-</div>
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                💵
+            </div>
+
+            <h3>
+                ₹{{ total_amount|default:"0" }}
+            </h3>
+
+            <p>
+                Total Donations
+            </p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📊
+            </div>
+
+            <h3>
+                {{ total_records }}
+            </h3>
+
+            <p>
+                Total Records
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         NEEDS ATTENTION
+    ====================================================== -->
+
+    <div class="attention-section">
+
+
+        <div class="section-title">
+
+            🚨 Needs Attention
+
+        </div>
+
+
+        <div class="attention-grid">
+
+
+            <!-- Pending Help Requests -->
+
+            <a href="/admin/help_requests/helprequest/"
+               class="attention-card">
+
+
+                <div class="attention-icon">
+
+                    🆘
+
+                </div>
+
+
+                <div class="attention-content">
+
+                    <h3>
+
+                        {{ pending_help_requests }}
+
+                    </h3>
+
+                    <p>
+
+                        Pending Help Requests
+
+                    </p>
+
+                </div>
+
+
+                <div class="attention-arrow">
+
+                    →
+
+                </div>
+
+
+            </a>
+
+
+            <!-- Pending Donations -->
+
+            <a href="/admin/donations/donation/"
+               class="attention-card">
+
+
+                <div class="attention-icon">
+
+                    💰
+
+                </div>
+
+
+                <div class="attention-content">
+
+                    <h3>
+
+                        {{ pending_donations }}
+
+                    </h3>
+
+                    <p>
+
+                        Pending Donations
+
+                    </p>
+
+                </div>
+
+
+                <div class="attention-arrow">
+
+                    →
+
+                </div>
+
+
+            </a>
+
+
         </div>
 
     </div>
 
+
+    <!-- =====================================================
+         CHART
+    ====================================================== -->
+
+    <div class="chart-card">
+
+
+        <div class="chart-header">
+
+
+            <div>
+
+                <h2>
+                    Foundation Statistics
+                </h2>
+
+                <span>
+                    Current activity overview
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="chart-wrapper">
+
+            <canvas id="foundationChart"></canvas>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         OVERVIEW + QUICK ACTIONS
+    ====================================================== -->
+
+    <div class="overview-grid">
+
+
+        <!-- Foundation Overview -->
+
+        <div class="overview-card">
+
+
+            <h2>
+                🌱 Foundation Overview
+            </h2>
+
+
+            <p>
+
+                Noor Al Huda Foundation works towards
+                supporting people in need through
+                donations, volunteers, community services,
+                education support and emergency assistance.
+
+            </p>
+
+
+            <p style="margin-top:12px;">
+
+                Total records currently managed:
+
+                <strong>
+                    {{ total_records }}
+                </strong>
+
+            </p>
+
+
+        </div>
+
+
+        <!-- Quick Actions -->
+
+        <div class="overview-card">
+
+
+            <h2>
+                ⚡ Quick Actions
+            </h2>
+
+
+            <div class="quick-actions">
+
+
+                <a href="/admin/"
+                   class="quick-action">
+
+                    ⚙️ Django Admin
+
+                </a>
+
+
+                <a href="/admin/events/event/"
+                   class="quick-action">
+
+                    🎉 Manage Events
+
+                </a>
+
+
+                <a href="/admin/donations/donation/"
+                   class="quick-action">
+
+                    💰 Manage Donations
+
+                </a>
+
+
+                <a href="/admin/help_requests/helprequest/"
+                   class="quick-action">
+
+                    🆘 Help Requests
+
+                </a>
+
+
+                <a href="/admin/volunteers/volunteer/"
+                   class="quick-action">
+
+                    🤝 Volunteers
+
+                </a>
+
+
+                <a href="/admin/home/contactmessage/"
+                   class="quick-action">
+
+                    💬 Contact Messages
+
+                </a>
+
+
+                <a href="/"
+                   class="quick-action">
+
+                    🏠 Foundation Website
+
+                </a>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         RECENT ACTIVITY
+    ====================================================== -->
+
+    <div class="activity-section">
+
+
+        <div class="section-title">
+
+            Recent Activity
+
+        </div>
+
+
+        <div class="activity-grid">
+
+
+            <!-- RECENT DONATIONS -->
+
+            <div class="activity-card">
+
+
+                <h3>
+                    💰 Recent Donations
+                </h3>
+
+
+                {% for donation in recent_donations %}
+
+
+                <div class="activity-item">
+
+
+                    <div class="activity-icon">
+                        💰
+                    </div>
+
+
+                    <div class="activity-content">
+
+
+                        <strong>
+
+                            {% if donation.donor_name %}
+
+                                {{ donation.donor_name }}
+
+                            {% else %}
+
+                                Anonymous Donor
+
+                            {% endif %}
+
+                        </strong>
+
+
+                        <span>
+
+                            {{ donation.created_at|date:"d M Y, h:i A" }}
+
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="activity-right">
+
+                        ₹{{ donation.amount|default:"0" }}
+
+                    </div>
+
+
+                </div>
+
+
+                {% empty %}
+
+
+                <div class="empty-state">
+
+                    No donations yet
+
+                </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+            <!-- RECENT HELP REQUESTS -->
+
+            <div class="activity-card">
+
+
+                <h3>
+                    🆘 Recent Help Requests
+                </h3>
+
+
+                {% for request in recent_help_requests %}
+
+
+                <div class="activity-item">
+
+
+                    <div class="activity-icon">
+                        🆘
+                    </div>
+
+
+                    <div class="activity-content">
+
+
+                        <strong>
+
+                            {{ request.full_name }}
+
+                        </strong>
+
+
+                        <span>
+
+                            {{ request.category }}
+
+                            •
+
+                            {{ request.created_at|date:"d M Y, h:i A" }}
+
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="activity-right">
+
+
+                        <span class="status">
+
+                            {{ request.status }}
+
+                        </span>
+
+
+                    </div>
+
+
+                </div>
+
+
+                {% empty %}
+
+
+                <div class="empty-state">
+
+                    No help requests yet
+
+                </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+            <!-- RECENT VOLUNTEERS -->
+
+            <div class="activity-card">
+
+
+                <h3>
+                    🤝 Recent Volunteers
+                </h3>
+
+
+                {% for volunteer in recent_volunteers %}
+
+
+                <div class="activity-item">
+
+
+                    <div class="activity-icon">
+                        🤝
+                    </div>
+
+
+                    <div class="activity-content">
+
+
+                        <strong>
+
+                            {{ volunteer.name }}
+
+                        </strong>
+
+
+                        <span>
+
+                            {{ volunteer.volunteer_area }}
+
+                            •
+
+                            {{ volunteer.availability }}
+
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="activity-right">
+
+                        {{ volunteer.created_at|date:"d M" }}
+
+                    </div>
+
+
+                </div>
+
+
+                {% empty %}
+
+
+                <div class="empty-state">
+
+                    No volunteers yet
+
+                </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+            <!-- EVENT PARTICIPANTS -->
+
+            <div class="activity-card">
+
+
+                <h3>
+                    👥 Event Participants
+                </h3>
+
+
+                {% for participation in recent_participations %}
+
+
+                <div class="activity-item">
+
+
+                    <div class="activity-icon">
+                        👥
+                    </div>
+
+
+                    <div class="activity-content">
+
+
+                        <strong>
+
+                            {{ participation.name }}
+
+                        </strong>
+
+
+                        <span>
+
+                            {{ participation.event.title }}
+
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="activity-right">
+
+                        Joined
+
+                    </div>
+
+
+                </div>
+
+
+                {% empty %}
+
+
+                <div class="empty-state">
+
+                    No participants yet
+
+                </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <div class="dashboard-footer">
+
+        © 2026 Noor Al Huda Foundation
+
+        • Serving humanity with kindness and care ❤️
+
+    </div>
+
+
 </div>
 
-{% endblock %}
+
+<!-- =====================================================
+     CHART JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+    const chartData = {
+
+        donations:
+            {{ chart_data.donations|default:0 }},
+
+        helpRequests:
+            {{ chart_data.help_requests|default:0 }},
+
+        volunteers:
+            {{ chart_data.volunteers|default:0 }},
+
+        events:
+            {{ chart_data.events|default:0 }},
+
+        participants:
+            {{ chart_data.participants|default:0 }},
+
+        contacts:
+            {{ chart_data.contacts|default:0 }}
+
+    };
+
+
+    const ctx =
+        document
+            .getElementById("foundationChart")
+            .getContext("2d");
+
+
+    new Chart(ctx, {
+
+        type: "bar",
+
+
+        data: {
+
+            labels: [
+
+                "Donations",
+
+                "Help Requests",
+
+                "Volunteers",
+
+                "Events",
+
+                "Participants",
+
+                "Contacts"
+
+            ],
+
+
+            datasets: [
+
+                {
+
+                    label: "Foundation Activity",
+
+
+                    data: [
+
+                        chartData.donations,
+
+                        chartData.helpRequests,
+
+                        chartData.volunteers,
+
+                        chartData.events,
+
+                        chartData.participants,
+
+                        chartData.contacts
+
+                    ],
+
+
+                    backgroundColor: [
+
+                        "#0b6b4f",
+
+                        "#e67e22",
+
+                        "#3498db",
+
+                        "#8e44ad",
+
+                        "#16a085",
+
+                        "#d35400"
+
+                    ],
+
+
+                    borderRadius: 8,
+
+                    borderWidth: 0
+
+                }
+
+            ]
+
+        },
+
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+
+            plugins: {
+
+                legend: {
+
+                    display: false
+
+                }
+
+            },
+
+
+            scales: {
+
+                y: {
+
+                    beginAtZero: true,
+
+                    ticks: {
+
+                        precision: 0
+
+                    },
+
+                    grid: {
+
+                        color: "#edf1ef"
+
+                    }
+
+                },
+
+
+                x: {
+
+                    grid: {
+
+                        display: false
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    });
+
+
+</script>
+
+
+</body>
+
+</html>
