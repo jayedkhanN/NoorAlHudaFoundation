@@ -3,9 +3,11 @@ from rest_framework.response import Response
 
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from django.core.mail import send_mail
 
 import random
+import os
+import json
+import urllib.request
 
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -76,46 +78,98 @@ class ForgotPasswordAPIView(generics.GenericAPIView):
 
         username = request.data.get('username')
 
+        # Check username
         if not username:
+
             return Response({
-                'message': 'Username is required'
+
+                'message':
+                'Username is required'
+
             }, status=status.HTTP_400_BAD_REQUEST)
 
+        # Find user
         try:
-            user = User.objects.get(username=username)
+
+            user = User.objects.get(
+                username=username
+            )
 
         except User.DoesNotExist:
+
             return Response({
-                'message': 'Username not found'
+
+                'message':
+                'Username not found'
+
             }, status=status.HTTP_404_NOT_FOUND)
 
+        # Check email
         if not user.email:
+
             return Response({
+
                 'message':
                 'No email address is registered for this account'
+
             }, status=status.HTTP_400_BAD_REQUEST)
 
         # Generate 6 digit OTP
-        otp = str(random.randint(100000, 999999))
+        otp = str(
+            random.randint(
+                100000,
+                999999
+            )
+        )
 
-        # Delete old OTPs
+        # Delete previous unverified OTPs
         PasswordResetOTP.objects.filter(
+
             user=user,
+
             is_verified=False
+
         ).delete()
 
         # Save new OTP
         PasswordResetOTP.objects.create(
+
             user=user,
+
             otp=otp
+
         )
 
-        # Send OTP email
+        # =================================================
+        # SEND OTP USING RESEND API
+        # =================================================
+
         try:
 
-            send_mail(
+            # Get Resend API key from environment
+            resend_api_key = os.environ.get(
+                'RESEND_API_KEY'
+            )
+
+            if not resend_api_key:
+
+                raise Exception(
+                    'RESEND_API_KEY is not configured'
+                )
+
+            # Email data
+            email_data = {
+
+                'from':
+                'Noor Al Huda Foundation <onboarding@resend.dev>',
+
+                'to':
+                [user.email],
+
+                'subject':
                 'Noor Al Huda - Password Reset OTP',
 
+                'text':
                 f'''
 Hello {user.username},
 
@@ -130,21 +184,70 @@ please ignore this email.
 
 Regards,
 Noor Al Huda Foundation
-''',
+'''
 
-                None,
+            }
 
-                [user.email],
+            # Create API request
+            req = urllib.request.Request(
 
-                fail_silently=False,
+                'https://api.resend.com/emails',
+
+                data=json.dumps(
+                    email_data
+                ).encode('utf-8'),
+
+                headers={
+
+                    'Authorization':
+                    f'Bearer {resend_api_key}',
+
+                    'Content-Type':
+                    'application/json'
+
+                },
+
+                method='POST'
+
             )
+
+            # Send request
+            with urllib.request.urlopen(
+                req,
+                timeout=20
+            ) as response:
+
+                response_data = (
+                    response
+                    .read()
+                    .decode('utf-8')
+                )
+
+                print(
+                    'RESEND EMAIL SUCCESS'
+                )
+
+                print(
+                    response_data
+                )
 
         except Exception as e:
 
-            print("========== OTP EMAIL ERROR ==========")
-            print(type(e).__name__)
-            print(str(e))
-            print("=====================================")
+            print(
+                '========== RESEND EMAIL ERROR =========='
+            )
+
+            print(
+                type(e).__name__
+            )
+
+            print(
+                str(e)
+            )
+
+            print(
+                '========================================'
+            )
 
             return Response({
 
@@ -156,6 +259,7 @@ Noor Al Huda Foundation
 
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+        # Success response
         return Response({
 
             'message':
@@ -172,9 +276,13 @@ class VerifyOTPAPIView(generics.GenericAPIView):
 
     def post(self, request):
 
-        username = request.data.get('username')
+        username = request.data.get(
+            'username'
+        )
 
-        otp_value = request.data.get('otp')
+        otp_value = request.data.get(
+            'otp'
+        )
 
         if not username or not otp_value:
 
@@ -200,6 +308,7 @@ class VerifyOTPAPIView(generics.GenericAPIView):
 
             }, status=status.HTTP_404_NOT_FOUND)
 
+        # Find OTP
         reset_otp = PasswordResetOTP.objects.filter(
 
             user=user,
@@ -240,7 +349,9 @@ class ResetPasswordAPIView(generics.GenericAPIView):
 
     def post(self, request):
 
-        username = request.data.get('username')
+        username = request.data.get(
+            'username'
+        )
 
         new_password = request.data.get(
             'new_password'
@@ -250,6 +361,7 @@ class ResetPasswordAPIView(generics.GenericAPIView):
             'confirm_password'
         )
 
+        # Username validation
         if not username:
 
             return Response({
@@ -259,6 +371,7 @@ class ResetPasswordAPIView(generics.GenericAPIView):
 
             }, status=status.HTTP_400_BAD_REQUEST)
 
+        # New password validation
         if not new_password:
 
             return Response({
@@ -268,6 +381,7 @@ class ResetPasswordAPIView(generics.GenericAPIView):
 
             }, status=status.HTTP_400_BAD_REQUEST)
 
+        # Confirm password validation
         if not confirm_password:
 
             return Response({
@@ -277,6 +391,7 @@ class ResetPasswordAPIView(generics.GenericAPIView):
 
             }, status=status.HTTP_400_BAD_REQUEST)
 
+        # Password match
         if new_password != confirm_password:
 
             return Response({
@@ -286,6 +401,7 @@ class ResetPasswordAPIView(generics.GenericAPIView):
 
             }, status=status.HTTP_400_BAD_REQUEST)
 
+        # Password length
         if len(new_password) < 6:
 
             return Response({
@@ -295,6 +411,7 @@ class ResetPasswordAPIView(generics.GenericAPIView):
 
             }, status=status.HTTP_400_BAD_REQUEST)
 
+        # Find user
         try:
 
             user = User.objects.get(
@@ -310,7 +427,7 @@ class ResetPasswordAPIView(generics.GenericAPIView):
 
             }, status=status.HTTP_404_NOT_FOUND)
 
-        # Check whether OTP was verified
+        # Check verified OTP
         verified_otp = PasswordResetOTP.objects.filter(
 
             user=user,
@@ -329,7 +446,9 @@ class ResetPasswordAPIView(generics.GenericAPIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
         # Change password
-        user.set_password(new_password)
+        user.set_password(
+            new_password
+        )
 
         user.save()
 
