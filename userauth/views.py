@@ -1,12 +1,15 @@
+
 from rest_framework import generics, status
 from rest_framework.response import Response
 
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from django.core.mail import send_mail
 
 import random
 import os
+import json
+import urllib.request
+import urllib.error
 
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -140,17 +143,79 @@ class ForgotPasswordAPIView(generics.GenericAPIView):
         )
 
         # =================================================
-        # SEND OTP USING BREVO SMTP
+        # SEND OTP USING BREVO HTTPS API
         # =================================================
 
         try:
 
-            send_mail(
+            api_key = os.environ.get(
+                'BREVO_API_KEY'
+            )
 
-                subject='Noor Al Huda - Password Reset OTP',
+            from_email = os.environ.get(
+                'DEFAULT_FROM_EMAIL'
+            )
 
-                message=f'''
-Hello {user.username},
+            # Check Brevo API key
+            if not api_key:
+
+                print(
+                    'BREVO_API_KEY is missing'
+                )
+
+                return Response({
+
+                    'message':
+                    'Email service is not configured'
+
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            # Check sender email
+            if not from_email:
+
+                print(
+                    'DEFAULT_FROM_EMAIL is missing'
+                )
+
+                return Response({
+
+                    'message':
+                    'Email sender is not configured'
+
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            # Brevo email data
+            brevo_data = {
+
+                'sender': {
+
+                    'name':
+                    'Noor Al Huda Foundation',
+
+                    'email':
+                    from_email
+
+                },
+
+                'to': [
+
+                    {
+
+                        'email':
+                        user.email,
+
+                        'name':
+                        user.username
+
+                    }
+
+                ],
+
+                'subject':
+                'Noor Al Huda - Password Reset OTP',
+
+                'textContent':
+                f'''Hello {user.username},
 
 Your password reset OTP is:
 
@@ -163,28 +228,103 @@ please ignore this email.
 
 Regards,
 Noor Al Huda Foundation
-''',
+'''
 
-                from_email=os.environ.get(
-                    'DEFAULT_FROM_EMAIL'
-                ),
+            }
 
-                recipient_list=[
-                    user.email
-                ],
+            # Convert data to JSON
+            data = json.dumps(
+                brevo_data
+            ).encode(
+                'utf-8'
+            )
 
-                fail_silently=False,
+            # Brevo HTTPS API request
+            req = urllib.request.Request(
 
+                'https://api.brevo.com/v3/smtp/email',
+
+                data=data,
+
+                method='POST'
+
+            )
+
+            # API headers
+            req.add_header(
+                'accept',
+                'application/json'
+            )
+
+            req.add_header(
+                'api-key',
+                api_key
+            )
+
+            req.add_header(
+                'content-type',
+                'application/json'
+            )
+
+            # Send email
+            with urllib.request.urlopen(
+                req,
+                timeout=30
+            ) as response:
+
+                response_data = response.read().decode(
+                    'utf-8'
+                )
+
+                print(
+                    'BREVO API EMAIL SUCCESS'
+                )
+
+                print(
+                    response_data
+                )
+
+        except urllib.error.HTTPError as e:
+
+            error_body = e.read().decode(
+                'utf-8',
+                errors='replace'
             )
 
             print(
-                'BREVO EMAIL SUCCESS'
+                '========== BREVO API EMAIL ERROR =========='
             )
+
+            print(
+                'HTTPError'
+            )
+
+            print(
+                f'Status: {e.code}'
+            )
+
+            print(
+                error_body
+            )
+
+            print(
+                '============================================'
+            )
+
+            return Response({
+
+                'message':
+                'Unable to send OTP email',
+
+                'error':
+                error_body
+
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         except Exception as e:
 
             print(
-                '========== BREVO EMAIL ERROR =========='
+                '========== BREVO API EMAIL ERROR =========='
             )
 
             print(
@@ -196,7 +336,7 @@ Noor Al Huda Foundation
             )
 
             print(
-                '========================================'
+                '============================================'
             )
 
             return Response({
