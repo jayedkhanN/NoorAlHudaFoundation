@@ -3,11 +3,10 @@ from rest_framework.response import Response
 
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.core.mail import send_mail
 
 import random
 import os
-import json
-import urllib.request
 
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -141,36 +140,16 @@ class ForgotPasswordAPIView(generics.GenericAPIView):
         )
 
         # =================================================
-        # SEND OTP USING RESEND API
+        # SEND OTP USING BREVO SMTP
         # =================================================
 
         try:
 
-            # Get Resend API key from environment
-            resend_api_key = os.environ.get(
-                'RESEND_API_KEY'
-            )
+            send_mail(
 
-            if not resend_api_key:
+                subject='Noor Al Huda - Password Reset OTP',
 
-                raise Exception(
-                    'RESEND_API_KEY is not configured'
-                )
-
-            # Email data
-            email_data = {
-
-                'from':
-                'Noor Al Huda Foundation <onboarding@resend.dev>',
-
-                'to':
-                [user.email],
-
-                'subject':
-                'Noor Al Huda - Password Reset OTP',
-
-                'text':
-                f'''
+                message=f'''
 Hello {user.username},
 
 Your password reset OTP is:
@@ -184,57 +163,28 @@ please ignore this email.
 
 Regards,
 Noor Al Huda Foundation
-'''
+''',
 
-            }
+                from_email=os.environ.get(
+                    'DEFAULT_FROM_EMAIL'
+                ),
 
-            # Create API request
-            req = urllib.request.Request(
+                recipient_list=[
+                    user.email
+                ],
 
-                'https://api.resend.com/emails',
-
-                data=json.dumps(
-                    email_data
-                ).encode('utf-8'),
-
-                headers={
-
-                    'Authorization':
-                    f'Bearer {resend_api_key}',
-
-                    'Content-Type':
-                    'application/json'
-
-                },
-
-                method='POST'
+                fail_silently=False,
 
             )
 
-            # Send request
-            with urllib.request.urlopen(
-                req,
-                timeout=20
-            ) as response:
-
-                response_data = (
-                    response
-                    .read()
-                    .decode('utf-8')
-                )
-
-                print(
-                    'RESEND EMAIL SUCCESS'
-                )
-
-                print(
-                    response_data
-                )
+            print(
+                'BREVO EMAIL SUCCESS'
+            )
 
         except Exception as e:
 
             print(
-                '========== RESEND EMAIL ERROR =========='
+                '========== BREVO EMAIL ERROR =========='
             )
 
             print(
