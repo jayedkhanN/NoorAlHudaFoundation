@@ -78,38 +78,25 @@ class ForgotPasswordAPIView(generics.GenericAPIView):
 
         if not username:
             return Response({
-
                 'message': 'Username is required'
-
             }, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-
-            user = User.objects.get(
-                username=username
-            )
+            user = User.objects.get(username=username)
 
         except User.DoesNotExist:
-
             return Response({
-
                 'message': 'Username not found'
-
             }, status=status.HTTP_404_NOT_FOUND)
 
         if not user.email:
-
             return Response({
-
                 'message':
                 'No email address is registered for this account'
-
             }, status=status.HTTP_400_BAD_REQUEST)
 
         # Generate 6 digit OTP
-        otp = str(
-            random.randint(100000, 999999)
-        )
+        otp = str(random.randint(100000, 999999))
 
         # Delete old OTPs
         PasswordResetOTP.objects.filter(
@@ -119,19 +106,17 @@ class ForgotPasswordAPIView(generics.GenericAPIView):
 
         # Save new OTP
         PasswordResetOTP.objects.create(
-
             user=user,
-
             otp=otp
-
         )
 
         # Send OTP email
-        send_mail(
+        try:
 
-            'Noor Al Huda - Password Reset OTP',
+            send_mail(
+                'Noor Al Huda - Password Reset OTP',
 
-            f'''
+                f'''
 Hello {user.username},
 
 Your password reset OTP is:
@@ -147,13 +132,29 @@ Regards,
 Noor Al Huda Foundation
 ''',
 
-            None,
+                None,
 
-            [user.email],
+                [user.email],
 
-            fail_silently=False,
+                fail_silently=False,
+            )
 
-        )
+        except Exception as e:
+
+            print("========== OTP EMAIL ERROR ==========")
+            print(type(e).__name__)
+            print(str(e))
+            print("=====================================")
+
+            return Response({
+
+                'message':
+                'Unable to send OTP email',
+
+                'error':
+                str(e)
+
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response({
 
