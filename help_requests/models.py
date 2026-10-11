@@ -1,3 +1,4 @@
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -21,6 +22,13 @@ class HelpRequest(models.Model):
         ("Other", "Other"),
     ]
 
+    STATUS_CHOICES = [
+        ("Pending", "Pending"),
+        ("Approved", "Approved"),
+        ("Rejected", "Rejected"),
+        ("Completed", "Completed"),
+    ]
+
     full_name = models.CharField(
         max_length=100
     )
@@ -40,11 +48,7 @@ class HelpRequest(models.Model):
 
     status = models.CharField(
         max_length=20,
-        choices=[
-            ("Pending", "Pending"),
-            ("Approved", "Approved"),
-            ("Rejected", "Rejected"),
-        ],
+        choices=STATUS_CHOICES,
         default="Pending"
     )
 

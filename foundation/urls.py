@@ -1,3 +1,4 @@
+
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -34,7 +35,15 @@ urlpatterns = [
         include('api.urls')
     ),
 
-    path('api/auth/', include('userauth.urls')),
+    path(
+        'api/auth/',
+        include('userauth.urls')
+    ),
+
+    path(
+        'api/help-requests/',
+        include('help_requests.urls')
+    ),
 ]
 
 
