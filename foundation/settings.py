@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'help_requests',
     'events',
     'userauth',
+    'projects',
 ]
 
 

@@ -44,6 +44,11 @@ urlpatterns = [
         'api/help-requests/',
         include('help_requests.urls')
     ),
+    
+    path(
+    'api/projects/',
+    include('projects.urls')
+),
 ]
 
 
